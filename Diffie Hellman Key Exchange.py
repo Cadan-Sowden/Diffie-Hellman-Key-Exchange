@@ -5,7 +5,8 @@ def manPGCheck():
     P = int(input("Please enter a prime number: "))
     phiP = P - 1
     G = int(input("Please enter a potential primitive root: "))
-    print("Please wait...")
+    print("""Please wait..."
+    It may be worth Restarting the Program using a different value for G""")
     factors = []
     nList = []
     flag = False
