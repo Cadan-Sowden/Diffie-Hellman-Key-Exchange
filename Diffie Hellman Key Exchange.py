@@ -93,7 +93,7 @@ def sharedPGGen():
     print("Share these values with the other user.")
 
 def pubKeyGen():
-    desiredPrivateKey = random.randint(1000000000000, 999999999999999)
+    desiredPrivateKey = random.randint(100000000000000000, 99999999999999999999)
     enteredSharedP = int(input("Please enter the shared P value: "))
     enteredG = int(input("Please enter the shared G value: "))
     Y = pow(enteredG, desiredPrivateKey, enteredSharedP)
