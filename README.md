@@ -7,5 +7,8 @@ For a value of P, use a large prime number generator (would recommend bigprimes.
 Plans moving forward:
 - Integrated large prime number generation
 - More efficient validation of the small generator with respect to P
+- Increase the length of the generated secret key to reduce the effectiveness of dictionary attacks
+- Add a GUI with a more simplified flow through the program
 
-Other than that pretty basic, was good practice.
+Other than that pretty basic. Certainly serving as good practice
+
