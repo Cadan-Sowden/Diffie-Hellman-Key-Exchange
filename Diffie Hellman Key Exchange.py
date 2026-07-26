@@ -1,6 +1,84 @@
 #imports
 import random
+p = 0
 #sub programs
+
+
+
+def get_25_digit_prime():
+    """
+    Subprogram to generate and return a single 25-digit prime number.
+    Requires no external libraries.
+    """
+    def is_prime(n, k=40):
+        # Internal helper for the Miller-Rabin primality test
+        if n in (2, 3): return True
+        if n % 2 == 0 or n < 2: return False
+        r, d = 0, n - 1
+        while d % 2 == 0:
+            r += 1
+            d //= 2
+        for _ in range(k):
+            a = random.randint(2, n - 2)
+            x = pow(a, d, n)
+            if x == 1 or x == n - 1: continue
+            for _ in range(r - 1):
+                x = pow(x, 2, n)
+                if x == n - 1: break
+            else: return False
+        return True
+
+    # Main loop to find the prime
+    while True:
+        # Generates a random number with exactly 25 digits
+        num = random.randint(10**24, (10**25) - 1)
+        # Fast pre-check: skip even numbers
+        if num % 2 != 0 and is_prime(num):
+            return num
+
+
+
+
+
+def autoPGCheck():
+    P = get_25_digit_prime()
+    phiP = P - 1
+    G = int(input("Please enter a potential primitive root: "))
+    print("Please wait...\nIt may be worth Restarting the Program using a different value for G")
+    factors = []
+    nList = []
+    flag = False
+    n = phiP
+    if n >= 2:
+        while n % 2 == 0:
+            factors.append(2)
+            n //= 2
+
+    i = 3
+    while i <= n // i:
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+        i += 2
+
+    if n > 1:
+        factors.append(n)
+
+    for i in range(len(factors)):
+        n = int(phiP / factors[i])
+        nList.append(n)
+
+    for testPower in nList:
+        residue = pow(G, testPower, P)
+        if residue == 1:
+            flag = True
+
+    if not flag:
+        print("Your values are: P = ", P, "G = ", G)
+        print("Share these values with the other user.")
+    else:
+        print("G is not a primitive root of P! Try again with another value of G.")
+
 def manPGCheck():
     P = int(input("Please enter a prime number: "))
     phiP = P - 1
@@ -153,23 +231,26 @@ def messageDecryption():
 #main program
 while True:
     print("Please select an option from the menu below by entering the number.")
-    userChoice = int(input("""1. Generate shared P and G values
-2. Generate your Public and Private keys
-3. Establish the Shared Secret Key
-4. Encrypt a message    
-5. Decrypt a message    
+    userChoice = int(input("""1. Generate shared P and G values using external Prime Number Generation
+2.Generate shared P and G values using internal Prime Number Generation 
+3. Generate your Public and Private keys
+4. Establish the Shared Secret Key
+5. Encrypt a message    
+6. Decrypt a message    
 Choice: """))
 
     if userChoice == 1:
         manPGCheck()
-    elif userChoice == 2:
-        pubKeyGen()
     elif userChoice == 3:
-        sharedKeyCalc()
+        pubKeyGen()
     elif userChoice == 4:
-        messageEncryption()
+        sharedKeyCalc()
     elif userChoice == 5:
+        messageEncryption()
+    elif userChoice == 6:
         messageDecryption()
+    elif userChoice == 2:
+        autoPGCheck()
     
         
     else:
