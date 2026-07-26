@@ -44,7 +44,7 @@ def autoPGCheck():
     P = get_25_digit_prime()
     phiP = P - 1
     G = int(input("Please enter a potential primitive root: "))
-    print("Please wait...\nIt may be worth Restarting the Program using a different value for G")
+    print("Please wait...\nIt may be worth Restarting the Program using a different value for G \n This is due to an increased time to halt being indicative of the given G value not being a primitive root")
     factors = []
     nList = []
     flag = False
