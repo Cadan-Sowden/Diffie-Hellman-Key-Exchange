@@ -5,7 +5,7 @@ Each step should be pretty self explanatory
 For a value of P, use a large prime number generator (would recommend bigprimes.org)
 
 Plans moving forward:
-- Integrated large prime number generation
+- Integrated large prime number generation (In Progress)
 - More efficient validation of the small generator with respect to P
 - Increase the length of the generated secret key to reduce the effectiveness of frequency analysis based attacks
 - Add a GUI with a more simplified flow through the program
