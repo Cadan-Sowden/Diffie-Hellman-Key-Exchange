@@ -155,47 +155,57 @@ def sharedKeyCalc():
     enteredPrivKey = int(input("Please enter your PRIVATE key: "))
     enteredPValue = int(input("Please enter the shared P value: "))
     K = pow(receivedPubKey, enteredPrivKey, enteredPValue)
+    #K value to be made as long as possible to prevent frequency analysis.
     print("Your Shared Secret Key is: ", K)
     print("The other user will have this value.")
     print("You can use this value to encrypt messages")
     print("Take care to NEVER share this key.")
 
 def messageEncryption():
-    BinList = []
-    temp = ""
-    encryptBinary = []
-    addToEnBin = ""
     msg = (input("Please enter your message: "))
     key = (input("Please enter the shared secret key: "))
     
     binMessage = "".join(format(ord(char), '08b') for char in msg)
-    binKey = "".join(format(ord(char), '08b') for char in key)
-    requiredKeys = binKey * (len(binMessage) // 8)  
+    
+    binKey = format(int(keyHash, 16), '0256b')
+    requiredKeys = (binKey * (len(binMessage) // len(binKey) + 1))[:len(binMessage)]
+
     for i in range(len(binMessage)):
         if binMessage[i] == requiredKeys[i]:
             addToEnBin = addToEnBin + "0"
         else:
             addToEnBin = addToEnBin + "1"
-    num = int(addToEnBin, 2)
-    hexNum = hex(num).upper()
-    print("Your encrypted Message is: ", hexNum[2:])
-
             
-        
+    num = int(addToEnBin, 2)
+    hex_length = (len(binMessage) + 3) // 4
+    hexNum = format(num, f'0{hex_length}x')
+    hexNum = hexNum.upper()
+    print("Your encrypted message is: ", hexNum)
 
 def messageDecryption():
-    msg = (input("Please enter the received message: "))
+    msg = (input("Please enter the received message: ")).strip().lower()
     key = (input("Please enter the shared secret key: "))
     addToEnBin = ""
-    binMessage = format(int(msg, 16), 'b')
-    binMessage = "0" + binMessage
-    binKey = "".join(format(ord(char), '08b') for char in key)
-    requiredKeys = binKey * (len(binMessage) // 8)
+    sha256 = hashlib.sha256() 
+    sha256.update(key.encode())
+    keyHash = sha256.hexdigest()
+    key = keyHash
+    key = key.upper()
+    
+    # FIXED: Convert hex cleanly back into bits matching the exact length of the hex string
+    bit_length = len(msg) * 4
+    binMessage = format(int(msg, 16), f'0{bit_length}b')
+    
+    # MATCHED: Uses the exact same 256-bit raw key format as the updated encryption routine
+    binKey = format(int(keyHash, 16), '0256b')
+    requiredKeys = (binKey * (len(binMessage) // len(binKey) + 1))[:len(binMessage)]
+    
     for i in range(len(binMessage)):
         if binMessage[i] == requiredKeys[i]:
             addToEnBin = addToEnBin + "0"
         else:
             addToEnBin = addToEnBin + "1"
+            
     s = ''.join(chr(int(addToEnBin[i:i+8], 2)) for i in range(0, len(addToEnBin), 8))
     print("Your decrypted Message is: ", s)
 #main program
