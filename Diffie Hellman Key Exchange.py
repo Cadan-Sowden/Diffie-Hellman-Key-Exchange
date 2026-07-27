@@ -108,6 +108,7 @@ def sharedKeyCalc():
     enteredPrivKey = int(input("Please enter your PRIVATE key: "))
     enteredPValue = int(input("Please enter the shared P value: "))
     K = pow(receivedPubKey, enteredPrivKey, enteredPValue)
+    #K value to be made as long as possible to prevent frequency analysis.
     print("Your Shared Secret Key is: ", K)
     print("The other user will have this value.")
     print("You can use this value to encrypt messages")
