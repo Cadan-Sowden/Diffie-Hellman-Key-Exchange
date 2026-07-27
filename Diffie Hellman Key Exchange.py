@@ -6,10 +6,6 @@ p = 0
 
 
 def get_25_digit_prime():
-    """
-    Subprogram to generate and return a single 25-digit prime number.
-    Requires no external libraries.
-    """
     def is_prime(n, k=40):
         # Internal helper for the Miller-Rabin primality test
         if n in (2, 3): return True
@@ -49,16 +45,11 @@ def manPGCheck():
     phiP = P - 1
     G = int(input("Please enter a potential primitive root: "))
     print("""Please wait..."
-    It may be worth Restarting the Program using a different value for G""")
+If waiting for over 30 seconds / 1 minute, it may be worth terminating the program and trying a different value of G.""")
     factors = []
     nList = []
     flag = False
-##    while True:
-##        enteredFactor = int(input("Please enter the prime factors of P - 1. Enter 1 to exit: "))
-##        if enteredFactor == 1:
-##            break
-##        else:
-##            factors.append(enteredFactor)
+
     n = phiP
     if n >= 2:
         while n % 2 == 0:
