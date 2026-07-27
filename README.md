@@ -11,8 +11,8 @@ Steps resume as shown in program.
 For a value of P, built in prime generator present. If not using this, use a site like bigprimes.org (No longer recommended due to typical generation of unsuitable primes causing extremely high run times)
 
 Plans moving forward:
-- Integrated large prime number generation (In Progress)
-- More efficient validation of the small generator with respect to P
+- Integrated large prime number generation (COMPLETE)
+- More efficient validation of the small generator with respect to P (COMPLETE)
 - Increase the length of the generated secret key to reduce the effectiveness of frequency analysis based attacks (COMPLETE)
 - Add a GUI with a more simplified flow through the program
 
