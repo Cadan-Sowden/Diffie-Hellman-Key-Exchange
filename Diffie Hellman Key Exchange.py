@@ -1,5 +1,6 @@
 #imports
 import random
+import hashlib
 #sub programs
 def manPGCheck():
     P = int(input("Please enter a prime number: "))
@@ -121,6 +122,10 @@ def messageEncryption():
     addToEnBin = ""
     msg = (input("Please enter your message: "))
     key = (input("Please enter the shared secret key: "))
+    sha256 = hashlib.sha256() #Similar Implementation
+    sha256.update(key.encode())
+    keyHash = sha256.hexdigest()
+    key = keyHash
     binMessage = "".join(format(ord(char), '08b') for char in msg)
     binKey = "".join(format(ord(char), '08b') for char in key)
     requiredKeys = binKey * (len(binMessage) // 8)  
@@ -142,6 +147,10 @@ def messageDecryption():
     addToEnBin = ""
     binMessage = format(int(msg, 16), 'b')
     binMessage = "0" + binMessage
+    sha256 = hashlib.sha256() #Similar Implementation
+    sha256.update(key.encode())
+    keyHash = sha256.hexdigest()
+    key = keyHash
     binKey = "".join(format(ord(char), '08b') for char in key)
     requiredKeys = binKey * (len(binMessage) // 8)
     for i in range(len(binMessage)):
