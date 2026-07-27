@@ -164,7 +164,11 @@ def sharedKeyCalc():
 def messageEncryption():
     msg = (input("Please enter your message: "))
     key = (input("Please enter the shared secret key: "))
-    
+
+    sha256 = hashlib.sha256()
+    sha256.update(key.encode())
+    keyHash = sha256.hexdigest()
+    addToEnBin = ""
     binMessage = "".join(format(ord(char), '08b') for char in msg)
     
     binKey = format(int(keyHash, 16), '0256b')
