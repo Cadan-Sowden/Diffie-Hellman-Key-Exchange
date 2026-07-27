@@ -40,44 +40,9 @@ def get_25_digit_prime():
 
 
 
-def autoPGCheck():
+def autoPGen():
     P = get_25_digit_prime()
-    phiP = P - 1
-    G = int(input("Please enter a potential primitive root: "))
-    print("Please wait...\nIt may be worth Restarting the Program using a different value for G \n This is due to an increased time to halt being indicative of the given G value not being a primitive root")
-    factors = []
-    nList = []
-    flag = False
-    n = phiP
-    if n >= 2:
-        while n % 2 == 0:
-            factors.append(2)
-            n //= 2
-
-    i = 3
-    while i <= n // i:
-        while n % i == 0:
-            factors.append(i)
-            n //= i
-        i += 2
-
-    if n > 1:
-        factors.append(n)
-
-    for i in range(len(factors)):
-        n = int(phiP / factors[i])
-        nList.append(n)
-
-    for testPower in nList:
-        residue = pow(G, testPower, P)
-        if residue == 1:
-            flag = True
-
-    if not flag:
-        print("Your values are: P = ", P, "G = ", G)
-        print("Share these values with the other user.")
-    else:
-        print("G is not a primitive root of P! Try again with another value of G.")
+    print("The generated prime number is: ", P)
 
 def manPGCheck():
     P = int(input("Please enter a prime number: "))
@@ -231,15 +196,15 @@ def messageDecryption():
 #main program
 while True:
     print("Please select an option from the menu below by entering the number.")
-    userChoice = int(input("""1. Generate shared P and G values using external Prime Number Generation
-2.Generate shared P and G values using internal Prime Number Generation 
+    userChoice = int(input("""1. Generate a Large Prime Number (P)
+2. Test values for accceptable G values
 3. Generate your Public and Private keys
 4. Establish the Shared Secret Key
 5. Encrypt a message    
 6. Decrypt a message    
 Choice: """))
 
-    if userChoice == 1:
+    if userChoice == 2:
         manPGCheck()
     elif userChoice == 3:
         pubKeyGen()
@@ -249,8 +214,8 @@ Choice: """))
         messageEncryption()
     elif userChoice == 6:
         messageDecryption()
-    elif userChoice == 2:
-        autoPGCheck()
+    elif userChoice == 1:
+        autoPGen()
     
         
     else:
