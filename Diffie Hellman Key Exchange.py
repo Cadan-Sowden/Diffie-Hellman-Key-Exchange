@@ -1,13 +1,12 @@
 #imports
 import random
+import math
+import hashlib
 p = 0
-#sub programs
 
-
-
-def get_25_digit_prime():
+#sub-programs
+def get_30_digit_prime():
     def is_prime(n, k=40):
-        # Internal helper for the Miller-Rabin primality test
         if n in (2, 3): return True
         if n % 2 == 0 or n < 2: return False
         r, d = 0, n - 1
@@ -24,69 +23,83 @@ def get_25_digit_prime():
             else: return False
         return True
 
-    # Main loop to find the prime
     while True:
-        # Generates a random number with exactly 25 digits
-        num = random.randint(10**24, (10**25) - 1)
-        # Fast pre-check: skip even numbers
+        num = random.randint(10**29, (10**30) - 1)
         if num % 2 != 0 and is_prime(num):
             return num
 
-
-
-
-
 def autoPGen():
-    P = get_25_digit_prime()
+    P = get_30_digit_prime()
     print("The generated prime number is: ", P)
+
+def internal_miller_rabin(n, k=5):
+    if n < 2: return False
+    for p_base in [2, 3, 5, 7, 11, 13, 17, 19, 23]:
+        if n == p_base: return True
+        if n % p_base == 0: return False
+    d = n - 1
+    s = 0
+    while d % 2 == 0:
+        d //= 2
+        s += 1
+    for _ in range(k):
+        a = random.randint(2, n - 2)
+        x = pow(a, d, n)
+        if x == 1 or x == n - 1: continue
+        for _ in range(s - 1):
+            x = pow(x, 2, n)
+            if x == n - 1: break
+        else: return False
+    return True
+
+def pollard_rho(n):
+    if n % 2 == 0: return 2
+    if internal_miller_rabin(n): return n
+    x = random.randint(2, n - 1)
+    y = x
+    c = random.randint(1, n - 1)
+    g = 1
+    while g == 1:
+        x = (pow(x, 2, n) + c) % n
+        y = (pow(y, 2, n) + c) % n
+        y = (pow(y, 2, n) + c) % n
+        g = math.gcd(abs(x - y), n)
+    return g
+
+def get_prime_factors(n):
+    factors = set()
+    queue = [n]
+    while queue:
+        curr = queue.pop()
+        if curr == 1: continue
+        if internal_miller_rabin(curr):
+            factors.add(curr)
+        else:
+            factor = pollard_rho(curr)
+            queue.append(factor)
+            queue.append(curr // factor)
+    return factors
 
 def manPGCheck():
     P = int(input("Please enter a prime number: "))
     phiP = P - 1
     G = int(input("Please enter a potential primitive root: "))
-    print("""Please wait..."
-If waiting for over 30 seconds / 1 minute, it may be worth terminating the program and trying a different value of G.""")
-    factors = []
-    nList = []
-    flag = False
+    
+    factors = get_prime_factors(phiP)
 
-    n = phiP
-    if n >= 2:
-        while n % 2 == 0:
-            factors.append(2)
-            n //= 2
-  
-    # Check odd factors from 3 up to the square root of n.
-    i = 3
-    while i < n // i:
-        while n % i == 0:
-            factors.append(i)
-            n //= i
-        i += 2
+    is_primitive = True
+    for q in factors:
+        testPower = phiP // q
+        if pow(G, testPower, P) == 1:
+            is_primitive = False
+            break
 
-    # If n is still greater than 1, it must be a prime factor.
-    if n > 1:
-        factors.append(n)   
-    for i in range(len(factors)):
-        n = int(phiP / factors[i-1])
-        nList.append(n)
-
-    for i in range(len(nList)):
-        testPower = nList[i-1]
-        residue = pow(G, testPower, P)
-        if residue == 1:
-            flag = True
-
-    if flag == False:
-        print("Your values are: P = ", P, "G = ", G)
+    if is_primitive:
+        print(f"Your values are: P = {P}, G = {G}")
         print("Share these values with the other user.")
-    if flag == True:
-        print("G is not a primitive root of P! Try again with another value of G.")
-        
-
-
-        
-            
+    else:
+        print(f"{G} is not a primitive root of {P}! Try again with another value ")
+                    
 def sharedPGGen():
 ##    def primRoots(modulo):
 ##        required_set = {num for num in range(1, modulo) if bltin_gcd(num, modulo) }
@@ -128,7 +141,7 @@ def sharedPGGen():
     print("Share these values with the other user.")
 
 def pubKeyGen():
-    desiredPrivateKey = random.randint(100000000000000000, 99999999999999999999)
+    desiredPrivateKey = random.randint(100000000000000000000000000, 99999999999999999999999999999)
     enteredSharedP = int(input("Please enter the shared P value: "))
     enteredG = int(input("Please enter the shared G value: "))
     Y = pow(enteredG, desiredPrivateKey, enteredSharedP)
@@ -154,6 +167,7 @@ def messageEncryption():
     addToEnBin = ""
     msg = (input("Please enter your message: "))
     key = (input("Please enter the shared secret key: "))
+    
     binMessage = "".join(format(ord(char), '08b') for char in msg)
     binKey = "".join(format(ord(char), '08b') for char in key)
     requiredKeys = binKey * (len(binMessage) // 8)  
