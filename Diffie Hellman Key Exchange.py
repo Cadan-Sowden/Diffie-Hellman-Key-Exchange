@@ -2,6 +2,7 @@
 import random
 import math
 import hashlib
+import tkinter as tk
 p = 0
 
 #sub-programs
