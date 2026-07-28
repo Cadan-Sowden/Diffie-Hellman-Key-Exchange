@@ -14,7 +14,7 @@ Plans moving forward:
 - Integrated large prime number generation (COMPLETE)
 - More efficient validation of the small generator with respect to P (COMPLETE)
 - Increase the length of the generated secret key to reduce the effectiveness of frequency analysis based attacks (COMPLETE)
-- Add a GUI with a more simplified flow through the program
+- Add a GUI with a more simplified flow through the program (IN PROGRESS)
 
 Changes:
 - Added SHA-256 Hash to Key before encryption / Decryption to increase the number of available characters before needing to reuse the key
