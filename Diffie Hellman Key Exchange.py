@@ -2,6 +2,7 @@
 import random
 import math
 import hashlib
+
 p = 0
 
 #sub-programs
